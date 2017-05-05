@@ -33,7 +33,7 @@ package com.lixiaocong.transmission4j;
 import com.lixiaocong.transmission4j.exception.AuthException;
 import com.lixiaocong.transmission4j.exception.NetworkException;
 import com.lixiaocong.transmission4j.response.Torrent;
-import com.sun.org.apache.xml.internal.security.utils.Base64;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Before;
@@ -55,12 +55,12 @@ public class TransmissionClientTest {
 
     @Before
     public void before() throws MalformedURLException {
-        client = new TransmissionClient("admin", "admin", "http://127.0.0.1:9091/transmission/rpc");
+        client = new TransmissionClient("transmission", "transmission", "http://127.0.0.1:9091/transmission/rpc");
     }
 
     @Test
     public void testAuthError() {
-        client = new TransmissionClient("admin", "error", "http://127.0.0.1:9091/transmission/rpc");
+        client = new TransmissionClient("transmission", "error", "http://127.0.0.1:9091/transmission/rpc");
         Exception exception = null;
         try {
             client.getAll();
@@ -72,7 +72,7 @@ public class TransmissionClientTest {
 
     @Test
     public void testNetworkError() {
-        client = new TransmissionClient("admin", "admin", "http://127.0.0.1/transmission/rpc");
+        client = new TransmissionClient("transmission", "transmission", "http://127.0.0.1/transmission/rpc");
         Exception exception = null;
         try {
             client.getAll();
@@ -117,7 +117,7 @@ public class TransmissionClientTest {
         int len = in.available();
         byte[] data = new byte[len];
         in.read(data, 0, len);
-        String str = Base64.encode(data);
+        String str = Base64.encodeBase64String(data);
         log.info(str);
         in.close();
         assertTrue(client.add(str));
